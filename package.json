@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "ifvisualizer.helloWorld",
-        "title": "Hello World"
+        "command": "ifvisualizer.visualizeIfConditions",
+        "title": "If Visualizer: Visualize If Conditions"
       }
     ]
   },

@@ -10,12 +10,14 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}"
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				//"--extensionTestsPath=${workspaceFolder}/out/test", // Only if you have tests
+				"--disable-extensions" // Optional: Disable all other extensions for a clean environment
 			],
 			"outFiles": [
 				"${workspaceFolder}/dist/**/*.js"
 			],
-			"preLaunchTask": "${defaultBuildTask}"
+			"preLaunchTask": "npm: watch:tsc"
 		}
 	]
 }

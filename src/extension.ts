@@ -2,25 +2,64 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+
+// Function to extract if conditions from a C# file
+function extractIfConditions(text: string): string[] {
+    const regex = /if\s*\((.*?)\)/g; // Simple regex to match if conditions (for simplicity)
+    let conditions: string[] = [];
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(text)) !== null) {
+        conditions.push(match[1].trim()); // Add the condition part of the if statement
+    }
+    return conditions;
+}
+
+// Create the webview panel to display if conditions
+function createWebviewPanel(conditions: string[]) {
+    const panel = vscode.window.createWebviewPanel(
+        'ifConditionVisualizer',
+        'If Condition Visualizer',
+        vscode.ViewColumn.One,
+        {}
+    );
+
+    // Set the content of the webview with HTML and the extracted conditions
+    panel.webview.html = `
+    <html>
+        <body>
+            <h1>Visualize If Conditions</h1>
+            <ul>
+                ${conditions.map(cond => `<li>${cond}</li>`).join('')}
+            </ul>
+        </body>
+    </html>`;
+}
+
 // This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "ifvisualizer" is now active!');
+    // Register the command to open the if condition visualizer
+    const disposable = vscode.commands.registerCommand('ifvisualizer.visualizeIfConditions', async () => {
+        // Get the currently open document
+        const editor = vscode.window.activeTextEditor;
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('ifvisualizer.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from IFVisualizer!');
-	});
+		// Check if language is CSharp
+        if (editor && editor.document.languageId === 'csharp') {
 
-	context.subscriptions.push(disposable);
+            // Extract the text content of the document
+            const text = editor.document.getText();
+            const conditions = extractIfConditions(text); // Extract if conditions using the regex
+
+            // Create and show the webview with the conditions
+            createWebviewPanel(conditions);
+        } else {
+            vscode.window.showInformationMessage('Please open a C# file to visualize if conditions.');
+        }
+    });
+
+    context.subscriptions.push(disposable);
 }
+
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
