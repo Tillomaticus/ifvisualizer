@@ -17,7 +17,7 @@
 			"outFiles": [
 				"${workspaceFolder}/dist/**/*.js"
 			],
-			"preLaunchTask": "npm: watch:tsc"
+			"preLaunchTask": "npm: prelaunch"
 		}
 	]
 }

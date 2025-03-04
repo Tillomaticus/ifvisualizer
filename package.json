@@ -14,10 +14,28 @@
   "contributes": {
     "commands": [
       {
-        "command": "ifvisualizer.visualizeIfConditions",
-        "title": "If Visualizer: Visualize If Conditions"
+        "command": "ifvisualizer.visualizeMarkedIfCondition",
+        "title": "If Visualizer: Visualize Marked If Conditions"
+      },
+      {
+        "command": "ifvisualizer.visualizeAllIfConditions",
+        "title": "If Visualizer: Visualize All If Conditions"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "ifvisualizer.visualizeMarkedIfCondition",
+          "when": "editorHasSelection && editorTextFocus",
+          "group": "navigation"
+        },
+        {
+          "command": "ifvisualizer.visualizeAllIfConditions",
+          "when": "editorTextFocus",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
