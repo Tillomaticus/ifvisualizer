@@ -40,8 +40,10 @@ function createWebviewPanel(conditions: string[], context: vscode.ExtensionConte
 
 	// Set the content of the webview
 	panel.webview.html = getWebviewContent(conditions, context);
+	// Send the conditions data to the webview
+	panel.webview.postMessage({ conditions });
 
-    // Clean up when the panel is closed
+	// Clean up when the panel is closed
 	panel.onDidDispose(() => {
 		existingPanel = undefined;
 	});
@@ -50,9 +52,9 @@ function createWebviewPanel(conditions: string[], context: vscode.ExtensionConte
 function getWebviewContent(conditions: string[], context: vscode.ExtensionContext): string {
 	const htmlPath = path.join(context.extensionPath, 'media', 'webview.html');
 	let htmlContent = fs.readFileSync(htmlPath, 'utf8');
-	
-    // Generate the cssUri within the function, where panel is available
-    const cssUri = vscode.Uri.file(path.join(context.extensionPath, 'media', 'styles.css'));
+
+	// Generate the cssUri within the function, where panel is available
+	const cssUri = vscode.Uri.file(path.join(context.extensionPath, 'media', 'styles.css'));
 
 
 	const conditionsList = conditions.map(cond => `<li>${cond}</li>`).join('');
