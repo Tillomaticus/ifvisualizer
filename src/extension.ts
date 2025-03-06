@@ -23,7 +23,7 @@ function createWebviewPanel(conditions: string[], context: vscode.ExtensionConte
 
 	if (existingPanel) {
 		// If it exists, update the content
-		existingPanel.webview.html = getWebviewContent(conditions, context);
+		existingPanel.webview.html = getWebviewContent(conditions, context, existingPanel);
 		existingPanel.reveal(vscode.ViewColumn.One); // Reveal the panel if it's hidden
 		return;
 	}
@@ -39,9 +39,10 @@ function createWebviewPanel(conditions: string[], context: vscode.ExtensionConte
 	existingPanel = panel;
 
 	// Set the content of the webview
-	panel.webview.html = getWebviewContent(conditions, context);
+	panel.webview.html = getWebviewContent(conditions, context, panel);
 	// Send the conditions data to the webview
 	panel.webview.postMessage({ conditions });
+
 
 	// Clean up when the panel is closed
 	panel.onDidDispose(() => {
@@ -49,20 +50,26 @@ function createWebviewPanel(conditions: string[], context: vscode.ExtensionConte
 	});
 }
 
-function getWebviewContent(conditions: string[], context: vscode.ExtensionContext): string {
-	const htmlPath = path.join(context.extensionPath, 'media', 'webview.html');
-	let htmlContent = fs.readFileSync(htmlPath, 'utf8');
+function getWebviewContent(conditions: string[], context: vscode.ExtensionContext, panel: vscode.WebviewPanel): string {
+    const htmlPath = path.join(context.extensionPath, 'media', 'webview.html');
+    let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
-	// Generate the cssUri within the function, where panel is available
-	const cssUri = vscode.Uri.file(path.join(context.extensionPath, 'media', 'styles.css'));
+    // Generate the cssUri and scriptUri using panel.webview.asWebviewUri()
+    const cssUri = panel.webview.asWebviewUri(vscode.Uri.file(path.join(context.extensionPath, 'media', 'styles.css')));
+    const scriptUri = panel.webview.asWebviewUri(vscode.Uri.file(path.join(context.extensionPath, 'media', 'script.js')));
 
+    console.log("CSS URI:", cssUri.toString());
+    console.log("Script URI:", scriptUri.toString());
 
-	const conditionsList = conditions.map(cond => `<li>${cond}</li>`).join('');
-	htmlContent = htmlContent.replace('{{conditionsList}}', conditionsList);
-	htmlContent = htmlContent.replace('{{cssUri}}', cssUri.toString());
+    const conditionsList = conditions.map(cond => `<li>${cond}</li>`).join('');
+    htmlContent = htmlContent.replace('{{conditionsList}}', conditionsList);
+    htmlContent = htmlContent.replace('{{cssUri}}', cssUri.toString());
+    htmlContent = htmlContent.replace('{{scriptUri}}', scriptUri.toString());
 
-	return htmlContent;
+    return htmlContent;
 }
+
+
 
 
 // This method is called when your extension is activated

@@ -25,3 +25,9 @@ body {
   a:hover {
     color: var(--vscode-textLink-activeForeground);
   }
+
+  canvas {
+    display: block;
+    background-color: --vscode-editor-background; 
+    border: 1px solid white;
+}
