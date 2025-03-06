@@ -1,0 +1,27 @@
+body {
+    background-color: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
+    font-family: 'Courier New', Courier, monospace;
+    margin: 10px;
+  }
+  
+  h1 {
+    color: var(--vscode-titleForeground); 
+  }
+  
+  ul {
+    list-style-type: none;
+  }
+  
+  li {
+    padding: 5px 0;
+  }
+  
+  a {
+    color: var(--vscode-textLink-foreground);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: var(--vscode-textLink-activeForeground);
+  }

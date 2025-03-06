@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualize If Conditions</title>
+    <link rel="stylesheet" type="text/css" href="{{cssUri}}">
+
+<body>
+    <h1>Visualize If Conditions</h1>
+    <ul id="conditions-list"></ul>
+
+    <script>
+        const vscode = acquireVsCodeApi();
+        window.addEventListener("message", (event) => {
+            const conditions = event.data.conditions || [];
+            const list = document.getElementById("conditions-list");
+            list.innerHTML = conditions.map(cond => `<li>${cond}</li>`).join('');
+        });
+    </script>
+</body>
+
+</html>
